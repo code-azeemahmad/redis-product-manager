@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+frontend/node_modules
+frontend/dist
+backend/alembic/versions/__pycache__
+tests/__pycache__

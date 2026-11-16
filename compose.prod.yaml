@@ -1,0 +1,85 @@
+# ==============================================================================
+# Docker Compose — Production Environment Deployment
+# ==============================================================================
+# Usage:
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d
+#
+# Architectural Invariants Enforced:
+# - PostgreSQL and Redis ports are private to internal-net (zero host port binds).
+# - Only Nginx (HTTP/HTTPS) is exposed to the gateway/host network.
+# - Containers run with explicit memory limits, restart policies, and health checks.
+# - Image tags are pinned to stable releases.
+# ==============================================================================
+
+services:
+  postgres:
+    image: postgres:17.4-alpine
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1024M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  redis:
+    image: redis:8.0-alpine
+    restart: always
+    mem_limit: 384m
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 384M
+        reservations:
+          cpus: "0.1"
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  backend:
+    restart: always
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+    volumes: [] # Production disables live code reloading bind mounts
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  nginx:
+    restart: always
+    ports:
+      - "${PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"

@@ -1,0 +1,958 @@
+/* ==============================================================================
+   Meta Design System - Hardware Commerce Theme (DESIGN.md)
+   With Dark (Default) & Light Mode Switcher
+   ============================================================================== */
+
+/* Base & Typography Shared Tokens */
+:root {
+  --font-family: "Optimistic VF", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Border Radius Scale (DESIGN.md rounded.*) */
+  --rounded-xs: 2px;
+  --rounded-sm: 4px;
+  --rounded-md: 6px;
+  --rounded-lg: 8px;
+  --rounded-xl: 16px;
+  --rounded-xxl: 24px;
+  --rounded-xxxl: 32px;
+  --rounded-feature: 40px;
+  --rounded-full: 100px;
+  --rounded-circle: 50%;
+
+  /* Spacing Scale (DESIGN.md spacing.*) */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 10px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --spacing-xxxl: 40px;
+  --spacing-section-sm: 48px;
+  --spacing-section: 64px;
+  --spacing-section-lg: 80px;
+}
+
+/* ==============================================================================
+   1. DARK THEME (DEFAULT)
+   ============================================================================== */
+:root,
+[data-theme="dark"] {
+  /* Brand & Accent Colors */
+  --color-primary: #1a73e8;
+  --color-primary-deep: #1557bf;
+  --color-primary-soft: #0091ff;
+  --color-on-primary: #ffffff;
+  --color-ink-button: #f3f6fa;
+  --color-on-ink-button: #0b0f17;
+  --color-fb-blue: #2d88ff;
+  --color-meta-link: #64b5f6;
+  --color-oculus-purple: #b339e3;
+
+  /* Semantic Status Colors */
+  --color-success: #31a24c;
+  --color-success-bg: #123e1e;
+  --color-attention: #f2a918;
+  --color-warning: #f7b928;
+  --color-warning-bg: #443202;
+  --color-critical: #fa383e;
+  --color-critical-strong: #ff4d54;
+
+  /* Surfaces & Canvas */
+  --color-canvas: #0b0f17;
+  --color-card-bg: #121824;
+  --color-surface-soft: #182232;
+  --color-input-bg: #101622;
+  --color-table-hover: #151e2c;
+  --color-banner-bg: #05080e;
+  --color-banner-text: #f3f6fa;
+
+  /* Text & Inks */
+  --color-ink-deep: #f3f6fa;
+  --color-ink: #c9d3e0;
+  --color-charcoal: #8e9cae;
+  --color-slate: #9faec0;
+  --color-steel: #748396;
+  --color-stone: #556274;
+
+  /* Borders & Dividers */
+  --color-hairline: #2b394e;
+  --color-hairline-soft: #1c2636;
+  --color-disabled-text: #3d495a;
+
+  /* Shadows */
+  --shadow-flat: none;
+  --shadow-subtle: rgba(0, 0, 0, 0.3) 0px 1px 3px 0px;
+  --shadow-card: rgba(0, 0, 0, 0.45) 0px 4px 16px 0px;
+  --shadow-modal: rgba(0, 0, 0, 0.75) 0px 16px 40px 0px;
+}
+
+/* ==============================================================================
+   2. LIGHT THEME
+   ============================================================================== */
+[data-theme="light"] {
+  /* Brand & Accent Colors */
+  --color-primary: #0064e0;
+  --color-primary-deep: #0457cb;
+  --color-primary-soft: #0091ff;
+  --color-on-primary: #ffffff;
+  --color-ink-button: #000000;
+  --color-on-ink-button: #ffffff;
+  --color-fb-blue: #1876f2;
+  --color-meta-link: #385898;
+  --color-oculus-purple: #a121ce;
+
+  /* Semantic Status Colors */
+  --color-success: #31a24c;
+  --color-success-bg: #24e400;
+  --color-attention: #f2a918;
+  --color-warning: #f7b928;
+  --color-warning-bg: #ffe200;
+  --color-critical: #e41e3f;
+  --color-critical-strong: #f0284a;
+
+  /* Surfaces & Canvas */
+  --color-canvas: #ffffff;
+  --color-card-bg: #ffffff;
+  --color-surface-soft: #f1f4f7;
+  --color-input-bg: #ffffff;
+  --color-table-hover: #fafbfc;
+  --color-banner-bg: #0a1317;
+  --color-banner-text: #ffffff;
+
+  /* Text & Inks */
+  --color-ink-deep: #0a1317;
+  --color-ink: #1c1e21;
+  --color-charcoal: #444950;
+  --color-slate: #4b4c4f;
+  --color-steel: #5d6c7b;
+  --color-stone: #8595a4;
+
+  /* Borders & Dividers */
+  --color-hairline: #ced0d4;
+  --color-hairline-soft: #dee3e9;
+  --color-disabled-text: #bcc0c4;
+
+  /* Shadows */
+  --shadow-flat: none;
+  --shadow-subtle: rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  --shadow-card: rgba(20, 22, 26, 0.08) 0px 2px 8px 0px;
+  --shadow-modal: rgba(20, 22, 26, 0.25) 0px 8px 30px 0px;
+}
+
+/* ==============================================================================
+   3. GLOBAL RESET & BASE STYLES
+   ============================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  line-height: 1.5;
+  letter-spacing: -0.16px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Headings with OpenType ss01, ss02 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  color: var(--color-ink-deep);
+  font-feature-settings: "ss01", "ss02";
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.hero-display {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.5px;
+  color: var(--color-ink-deep);
+}
+
+.display-lg {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 500;
+  line-height: 1.18;
+  color: var(--color-ink-deep);
+}
+
+.heading-editorial {
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 300;
+  line-height: 1.3;
+  color: var(--color-charcoal);
+}
+
+.subtitle-lg {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.44;
+  color: var(--color-ink-deep);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--color-primary-deep);
+  text-decoration: underline;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-canvas);
+  transition: background-color 0.2s ease;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-xxl) var(--spacing-xl);
+}
+
+/* Promotional Announcement Banner Strip */
+.promo-banner {
+  background-color: var(--color-banner-bg);
+  color: var(--color-banner-text);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.14px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  position: relative;
+  z-index: 101;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  transition: background-color 0.2s ease;
+}
+
+.promo-banner a {
+  color: var(--color-meta-link);
+  text-decoration: underline;
+}
+
+.promo-banner .badge-pill-inline {
+  background-color: var(--color-warning);
+  color: #0b0f17;
+  border-radius: var(--rounded-full);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Top Navigation */
+.navbar {
+  background-color: var(--color-canvas);
+  border-bottom: 1px solid var(--color-hairline-soft);
+  height: 64px;
+  padding: 0 var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--color-ink-deep);
+  text-decoration: none;
+}
+
+.nav-brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rounded-circle);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-oculus-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Category Pill Tabs */
+.btn-pill-tab {
+  background-color: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.14px;
+  border-radius: var(--rounded-full);
+  padding: 8px 18px;
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.btn-pill-tab:hover {
+  background-color: var(--color-hairline-soft);
+  text-decoration: none;
+  color: var(--color-ink-deep);
+}
+
+.btn-pill-tab.active {
+  background-color: var(--color-ink-deep);
+  color: var(--color-canvas);
+  border-color: var(--color-ink-deep);
+}
+
+/* Theme Switcher Button */
+.btn-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-surface-soft);
+  color: var(--color-ink-deep);
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.14px;
+  border-radius: var(--rounded-full);
+  padding: 7px 14px;
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-theme-toggle:hover {
+  background-color: var(--color-hairline);
+  color: var(--color-ink-deep);
+  transform: translateY(-1px);
+}
+
+.btn-theme-toggle:active {
+  transform: translateY(0);
+}
+
+.theme-toggle-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.theme-toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Health Badge */
+.health-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--rounded-full);
+  background-color: rgba(49, 162, 76, 0.14);
+  color: var(--color-success);
+  border: 1px solid rgba(49, 162, 76, 0.3);
+  letter-spacing: -0.1px;
+}
+
+.health-badge.degraded {
+  background-color: rgba(242, 169, 24, 0.14);
+  color: var(--color-attention);
+  border-color: rgba(242, 169, 24, 0.35);
+}
+
+.health-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--rounded-circle);
+  background-color: currentColor;
+}
+
+/* ==============================================================================
+   4. BUTTONS — Strictly Pill-Shaped {rounded.full}
+   ============================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.14px;
+  border-radius: var(--rounded-full);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.43;
+}
+
+.btn:active {
+  transform: scale(0.985);
+}
+
+/* Primary Marketing Button: Ink Button Pill */
+.btn-primary {
+  background-color: var(--color-ink-button);
+  color: var(--color-on-ink-button);
+  padding: 14px 28px;
+  border: none;
+  font-weight: 700;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  opacity: 0.9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:disabled {
+  background-color: var(--color-disabled-text);
+  color: var(--color-canvas);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Primary Commerce CTA: Saturated Cobalt Pill */
+.btn-buy-cta {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  padding: 14px 30px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(26, 115, 232, 0.35);
+}
+
+.btn-buy-cta:hover, .btn-buy-cta:focus {
+  background-color: var(--color-primary-deep);
+  color: var(--color-on-primary);
+}
+
+.btn-buy-cta:disabled {
+  background-color: var(--color-disabled-text);
+  color: var(--color-canvas);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Secondary Button: Outlined Ghost Pill */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-ink-deep);
+  border: 2px solid var(--color-ink-deep);
+  padding: 12px 26px;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+  background-color: rgba(10, 19, 23, 0.05);
+}
+
+.btn-secondary:disabled {
+  border-color: var(--color-hairline);
+  color: var(--color-stone);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Ghost Button: Light Border */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-ink-deep);
+  border: 2px solid var(--color-hairline);
+  padding: 10px 22px;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-ink-deep);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .btn-ghost:hover {
+  background-color: rgba(10, 19, 23, 0.03);
+}
+
+/* Destructive Button: Red Pill */
+.btn-danger {
+  background-color: var(--color-critical);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+}
+
+.btn-danger:hover {
+  background-color: var(--color-critical-strong);
+}
+
+.btn-danger:disabled {
+  background-color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Compact Pill Button variant for tables / toolbars */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+/* ==============================================================================
+   5. CARDS & SURFACES
+   ============================================================================== */
+.card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xxl);
+  padding: var(--spacing-xxl);
+  box-shadow: var(--shadow-flat);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.card-product-feature {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xxxl);
+  padding: var(--spacing-xxl);
+}
+
+.card-checkout-summary {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.warranty-card {
+  background-color: var(--color-surface-soft);
+  border-radius: var(--rounded-xxl);
+  padding: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+  border: 1px solid var(--color-hairline-soft);
+}
+
+/* Reassurance Tiles / Feature Icon Row */
+.why-buy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-section-sm);
+}
+
+.why-buy-tile {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.why-buy-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.why-buy-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink-deep);
+}
+
+.why-buy-desc {
+  font-size: 14px;
+  color: var(--color-charcoal);
+  line-height: 1.45;
+}
+
+/* Product Showcase Visual */
+.product-thumbnail-box {
+  background-color: var(--color-surface-soft);
+  border-radius: var(--rounded-xxxl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  padding: var(--spacing-xxl);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-hairline-soft);
+}
+
+.product-thumbnail-box-sm {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-surface-soft);
+  border-radius: var(--rounded-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-hairline-soft);
+}
+
+/* ==============================================================================
+   6. INPUTS & FORM CONTROLS
+   ============================================================================== */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--color-ink-deep);
+  letter-spacing: -0.14px;
+}
+
+.form-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  background-color: var(--color-input-bg);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-lg);
+  color: var(--color-ink-deep);
+  font-family: var(--font-family);
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border: 2px solid var(--color-fb-blue);
+  padding: 0 13px;
+}
+
+.form-input::placeholder {
+  color: var(--color-steel);
+}
+
+.form-input:disabled {
+  background-color: var(--color-surface-soft);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Search Pill */
+.search-pill {
+  height: 40px;
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-full);
+  padding: 0 18px;
+  color: var(--color-ink-deep);
+  font-family: var(--font-family);
+  font-size: 14px;
+  letter-spacing: -0.14px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.search-pill:focus {
+  outline: none;
+  border-color: var(--color-fb-blue);
+  background-color: var(--color-input-bg);
+}
+
+.search-pill::placeholder {
+  color: var(--color-steel);
+}
+
+/* ==============================================================================
+   7. TABLES
+   ============================================================================== */
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--rounded-xl);
+  border: 1px solid var(--color-hairline-soft);
+  background-color: var(--color-card-bg);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+
+.data-table th {
+  background-color: var(--color-surface-soft);
+  color: var(--color-charcoal);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background-color: var(--color-table-hover);
+}
+
+/* ==============================================================================
+   8. BADGES & LABELS
+   ============================================================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.33;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background-color: var(--color-success);
+  color: #ffffff;
+}
+
+.badge-attention {
+  background-color: var(--color-attention);
+  color: #ffffff;
+}
+
+.badge-warning {
+  background-color: var(--color-warning);
+  color: #0b0f17;
+}
+
+.badge-critical {
+  background-color: var(--color-critical);
+  color: #ffffff;
+}
+
+.badge-category {
+  background-color: var(--color-surface-soft);
+  color: var(--color-ink-deep);
+  border: 1px solid var(--color-hairline);
+  font-weight: 600;
+}
+
+.price-tag {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-ink-deep);
+}
+
+.price-tag-lg {
+  font-family: var(--font-family);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-ink-deep);
+  letter-spacing: -0.5px;
+}
+
+/* ==============================================================================
+   9. MODALS
+   ============================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xxl);
+  max-width: 520px;
+  width: 100%;
+  padding: var(--spacing-xxl);
+  box-shadow: var(--shadow-modal);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ==============================================================================
+   10. ALERTS
+   ============================================================================== */
+.alert {
+  padding: 14px 20px;
+  border-radius: var(--rounded-xl);
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.alert-danger {
+  background-color: rgba(250, 56, 62, 0.12);
+  border: 1px solid rgba(250, 56, 62, 0.35);
+  color: var(--color-critical);
+}
+
+.alert-warning {
+  background-color: rgba(247, 185, 40, 0.14);
+  border: 1px solid rgba(247, 185, 40, 0.4);
+  color: var(--color-warning);
+}
+
+[data-theme="light"] .alert-warning {
+  color: #8c6200;
+}
+
+/* ==============================================================================
+   11. DASHBOARD METRICS
+   ============================================================================== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-section-sm);
+}
+
+.metric-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.metric-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-bottom: 8px;
+  letter-spacing: -0.14px;
+}
+
+.metric-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-ink-deep);
+  letter-spacing: -0.5px;
+}
+
+/* ==============================================================================
+   12. PAGINATION & TECH SPECS
+   ============================================================================== */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tech-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tech-specs-table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+
+.tech-specs-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink-deep);
+  width: 40%;
+}
+
+.tech-specs-value {
+  font-size: 14px;
+  color: var(--color-charcoal);
+}
+
+/* ==============================================================================
+   13. RESPONSIVE BREAKPOINTS
+   ============================================================================== */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 var(--spacing-base);
+  }
+
+  .main-content {
+    padding: var(--spacing-lg) var(--spacing-base);
+  }
+
+  .hero-display {
+    font-size: 32px;
+  }
+
+  .card {
+    padding: var(--spacing-xl);
+  }
+
+  .theme-toggle-label {
+    display: none;
+  }
+}

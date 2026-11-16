@@ -1,0 +1,134 @@
+# ==============================================================================
+# Docker Compose — Redis Product Manager Infrastructure
+# ==============================================================================
+
+name: redis-product-manager
+
+networks:
+  # Private internal network for backend, database, and cache
+  # Neither postgres nor redis exposes ports to the host in this configuration
+  internal-net:
+    driver: bridge
+
+  # Gateway network for reverse proxy (Nginx) and backend
+  gateway-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: redis-saas-postgres-data
+    external: true
+
+services:
+  # ----------------------------------------------------------------------------
+  # PostgreSQL 17 — Authoritative Permanent Data Store
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:17-alpine
+    container_name: saas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-saas_products}
+      POSTGRES_USER: ${POSTGRES_USER:-app_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_postgres_password_change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ----------------------------------------------------------------------------
+  # Redis 8 — Disposable Cache & Best-Effort Rate Limiting
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:8-alpine
+    container_name: saas-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./redis/users.acl:/usr/local/etc/redis/users.acl:ro
+    environment:
+      HEALTHCHECK_REDIS_PASSWORD: ${HEALTHCHECK_REDIS_PASSWORD:-dev_redis_healthcheck_password_change_me}
+    networks:
+      - internal-net
+    mem_limit: 384m
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --user healthcheck -a \"$$HEALTHCHECK_REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # ----------------------------------------------------------------------------
+  # Backend — FastAPI Application (Phase 1 Skeleton & Verification)
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: saas-backend
+    restart: unless-stopped
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DEBUG: ${DEBUG:-false}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      APP_NAME: ${APP_NAME:-redis-product-manager}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-saas_products}
+      POSTGRES_USER: ${POSTGRES_USER:-app_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_postgres_password_change_me}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_USER: ${REDIS_USER:-app}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-dev_redis_app_password_change_me}
+      HEALTHCHECK_REDIS_PASSWORD: ${HEALTHCHECK_REDIS_PASSWORD:-dev_redis_healthcheck_password_change_me}
+    volumes:
+      - ./backend:/app
+    networks:
+      - internal-net
+      - gateway-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health/live || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # ----------------------------------------------------------------------------
+  # Nginx — Reverse Proxy & Static Frontend Host (HTTP Entry Point)
+  # ----------------------------------------------------------------------------
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    container_name: saas-nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    networks:
+      - gateway-net
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/health/live || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+

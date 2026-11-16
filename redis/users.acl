@@ -1,0 +1,34 @@
+# ==============================================================================
+# Redis ACL Configuration
+# ==============================================================================
+# Security guidelines:
+# 1. Default user is disabled.
+# 2. Dedicated application user with password hash (SHA-256).
+# 3. Dedicated healthcheck user restricted strictly to PING.
+#
+# To generate a SHA-256 password hash:
+#   printf "%s" "YOUR_PASSWORD" | sha256sum | awk '{print $1}'
+#
+# Development defaults (matched in .env.example):
+# - app password:          dev_redis_app_password_change_me
+# - healthcheck password:  dev_redis_healthcheck_password_change_me
+# ==============================================================================
+
+# Disable default unauthenticated user
+user default off
+
+# Administrative operator user for maintenance, inspection, and migration tasks
+# SHA-256 hash for 'dev_redis_admin_password_change_me'
+user admin on #93f16e3ce42d1ababed64a69b3b4d8f3c120c25c98e04266ccbd5039c4d0cf72 ~* &* +@all
+
+# Application user: strictly least-privilege for cache & rate limiting
+# Key pattern: restricted strictly to ~v1:*
+# Pub/sub channels: disabled (resetchannels)
+# Commands: read, write, ping, info, eval, evalsha, client setinfo; dangerous & admin forbidden
+# SHA-256 hash for 'dev_redis_app_password_change_me'
+user app on #23979dbcb4b89bcb3af07bf34bd7f20f62d250223b842ae48daeaa19261b89ad resetkeys ~v1:* resetchannels -@all +@read +@write +ping +eval +evalsha +client|setinfo -@admin -@dangerous +info
+
+# Healthcheck user: strictly restricted to +ping command
+# SHA-256 hash for 'dev_redis_healthcheck_password_change_me'
+user healthcheck on #199d31f6eefef3797b2fecb6d305a39c166c3f453a453ca63720a627f6621573 resetchannels -@all +ping
+
